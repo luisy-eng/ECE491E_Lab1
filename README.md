@@ -2,187 +2,223 @@
 
 ## Exploring Neural Network Design: Modifying Architecture, Loss Functions, and Datasets
 
-This repository contains the code and experimental results for **ECE 491E Lab 1**. The project explores the PyTorch neural network workflow and then modifies the dataset, neural network architecture, and loss function.
+This repository contains the code, experiments, and results for **ECE 491E Lab 1**. The project explores the fundamentals of neural network development using PyTorch and investigates how changing the dataset, model architecture, and loss function affects the neural network workflow.
 
-The project is divided into four tasks:
+The project consists of four tasks:
 
-1. Complete the PyTorch *Learn the Basics* tutorials and demonstrate model predictions.
+1. Complete the PyTorch *Learn the Basics* tutorial and demonstrate the trained model's predictions.
 2. Replace the original dataset with CIFAR-10 and preprocess the data.
-3. Modify the neural network to use a deeper feedforward architecture.
+3. Replace the tutorial model with a deeper feedforward neural network.
 4. Replace the classification loss function with Mean Squared Error (MSE) loss.
 
 ---
 
-## Task 1 — PyTorch Tutorial
+## Repository Structure
+
+```text
+ECE491E_Lab1/
+│
+├── README.md
+│
+└── Task1/
+    ├── Task1_Tensors.ipynb
+    ├── Task1_Datasets&DataLoaders.ipynb
+    ├── Task1_transforms.ipynb
+    ├── Task1_buildmodel_tutorial.ipynb
+    ├── Task1_autogradqs_tutorial.ipynb
+    ├── Task1_optimization.ipynb
+    └── Task1_saveloadrun.ipynb
+```
+
+Additional directories will be added as Tasks 2–4 are completed.
+
+---
+
+# Task 1 — PyTorch Tutorial
 
 **Status: Complete**
 
-Task 1 follows the official PyTorch *Learn the Basics* tutorial. The purpose of this task was to become familiar with the basic PyTorch workflow, including tensors, datasets, transforms, neural network construction, automatic differentiation, optimization, and model persistence.
+Task 1 follows the official PyTorch *Learn the Basics* tutorial. The purpose of this task was to gain experience with the fundamental components of the PyTorch workflow rather than to design a new neural network.
 
-### Task 1 Notebooks
+The tutorials cover tensors, datasets and DataLoaders, transforms, neural network construction, automatic differentiation, optimization, and saving and loading models.
 
-| Notebook                            | Description                                                       |
-| ----------------------------------- | ----------------------------------------------------------------- |
-| `Task1_tensorqs_tutorial.ipynb`     | Introduction to PyTorch tensors and tensor operations.            |
-| `Task1_data_tutorial.ipynb`         | Working with datasets and DataLoaders.                            |
-| `Task1_transforms_tutorial.ipynb`   | Applying transformations to datasets.                             |
-| `Task1_buildmodel_tutorial.ipynb`   | Building a neural network using `nn.Module`.                      |
-| `Task1_autogradqs_tutorial.ipynb`   | Introduction to automatic differentiation using `torch.autograd`. |
-| `Task1_optimization_tutorial.ipynb` | Training and evaluating the FashionMNIST neural network.          |
-| `Task1_saveloadrun_tutorial.ipynb`  | Saving and loading PyTorch models.                                |
+All Task 1 notebooks are organized in the [`Task1/`](Task1/) directory.
 
-> **Note:** Notebook filenames in the repository should be used as the authoritative names if they differ slightly from those shown above.
+## Task 1 Notebooks
 
-### Task 1 Model
+| Notebook                                                                       | Description                                                                                  |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| [`Task1_Tensors.ipynb`](Task1/Task1_Tensors.ipynb)                             | Introduction to PyTorch tensors and tensor operations.                                       |
+| [`Task1_Datasets&DataLoaders.ipynb`](Task1/Task1_Datasets%26DataLoaders.ipynb) | Working with PyTorch `Dataset` and `DataLoader`.                                             |
+| [`Task1_transforms.ipynb`](Task1/Task1_transforms.ipynb)                       | Applying transformations to datasets.                                                        |
+| [`Task1_buildmodel_tutorial.ipynb`](Task1/Task1_buildmodel_tutorial.ipynb)     | Building a neural network using `nn.Module`.                                                 |
+| [`Task1_autogradqs_tutorial.ipynb`](Task1/Task1_autogradqs_tutorial.ipynb)     | Automatic differentiation using `torch.autograd`.                                            |
+| [`Task1_optimization.ipynb`](Task1/Task1_optimization.ipynb)                   | Training and evaluating the FashionMNIST neural network and demonstrating model predictions. |
+| [`Task1_saveloadrun.ipynb`](Task1/Task1_saveloadrun.ipynb)                     | Saving and loading PyTorch models.                                                           |
 
-The tutorial uses the FashionMNIST dataset and a fully connected neural network with the following architecture:
+---
+
+## Task 1 Model
+
+The PyTorch tutorial uses the **FashionMNIST** dataset. Each FashionMNIST image is a 28 × 28 grayscale image belonging to one of ten clothing classes.
+
+The tutorial neural network uses the following architecture:
 
 ```text
 28 × 28 Image
-     ↓
+     │
+     ▼
    Flatten
-     ↓
+     │
+     ▼
 Linear(784, 512)
-     ↓
+     │
+     ▼
     ReLU
-     ↓
+     │
+     ▼
 Linear(512, 512)
-     ↓
+     │
+     ▼
     ReLU
-     ↓
+     │
+     ▼
 Linear(512, 10)
-     ↓
+     │
+     ▼
 10 FashionMNIST Classes
 ```
 
-### Training Configuration
+---
 
-The optimization tutorial was run using:
+## Training Configuration
 
-| Parameter     |            Value |
-| ------------- | ---------------: |
-| Dataset       |     FashionMNIST |
-| Batch Size    |               64 |
+The optimization portion of the tutorial was run with the following configuration:
+
+| Parameter     | Value            |
+| ------------- | ---------------- |
+| Dataset       | FashionMNIST     |
+| Batch Size    | 64               |
 | Loss Function | CrossEntropyLoss |
-| Optimizer     |              SGD |
-| Learning Rate |            0.001 |
-| Epochs        |               10 |
+| Optimizer     | SGD              |
+| Learning Rate | 0.001            |
+| Epochs        | 10               |
 
-### Results
+---
 
-After 10 epochs, the trained model achieved:
+## Task 1 Results
+
+After training for 10 epochs, the model achieved:
 
 * **Test Accuracy:** 70.6%
 * **Average Test Loss:** 0.789814
 
-### Prediction Demonstration
-
-An additional **Prediction Demonstration** was added to the optimization notebook to satisfy the project requirement to display model predictions alongside their corresponding ground-truth labels.
-
-The demonstration:
-
-1. Obtains test images and their ground-truth labels from the FashionMNIST test DataLoader.
-2. Passes the images through the trained model.
-3. Selects the class with the highest model output as the prediction.
-4. Displays ten test images.
-5. Labels each image with both its **Ground Truth** and **Prediction**.
-
-The resulting figure is also used in the project report.
+These results were obtained from the completed optimization tutorial.
 
 ---
 
-## Task 2 — CIFAR-10 Dataset
+## Prediction Demonstration
 
-**Status: Not Started**
+The project instructions additionally require a figure displaying the model's **ground-truth labels and predictions**.
 
-Task 2 will replace the original dataset with CIFAR-10.
+To satisfy this requirement, a **Prediction Demonstration** section was added to [`Task1_optimization.ipynb`](Task1/Task1_optimization.ipynb).
 
-The dataset will be:
+This section was an addition to the optimization tutorial and performs the following steps:
 
-* Converted to tensors.
-* Normalized.
-* Split into 80% training and 20% testing sets.
+1. Retrieves a batch of images and ground-truth labels from the FashionMNIST test DataLoader.
+2. Places the trained model in evaluation mode.
+3. Performs inference without calculating gradients.
+4. Determines the predicted class from the model output.
+5. Displays ten test images.
+6. Captions each image with its **Ground Truth** and **Prediction**.
 
-Implementation and experimental details will be added after completion.
+This visualization provides a qualitative demonstration of the trained model's performance in addition to the numerical test accuracy.
 
 ---
 
-## Task 3 — Modified Neural Network
+# Remaining Tasks
+
+## Task 2 — Customize Dataset
 
 **Status: Not Started**
 
-Task 3 will replace the tutorial model with a deeper feedforward neural network.
+The FashionMNIST dataset will be replaced with **CIFAR-10**. The dataset will be normalized and divided into an **80% training / 20% testing** split.
 
-Required architecture:
+---
+
+## Task 3 — Customize Model
+
+**Status: Not Started**
+
+The tutorial model will be replaced with the required deeper feedforward neural network:
 
 ```text
 Input
-  ↓
+  │
+  ▼
 Linear(Input Size, 128)
-  ↓
+  │
+  ▼
 ReLU
-  ↓
+  │
+  ▼
 Dropout(0.3)
-  ↓
+  │
+  ▼
 Linear(128, 64)
-  ↓
+  │
+  ▼
 ReLU
-  ↓
+  │
+  ▼
 Dropout(0.3)
-  ↓
+  │
+  ▼
 Linear(64, 1)
-  ↓
+  │
+  ▼
 Regression Output
 ```
 
-Implementation and experimental results will be added after completion.
-
 ---
 
-## Task 4 — Modified Loss Function
+## Task 4 — Customize Loss Function
 
 **Status: Not Started**
 
-Task 4 will replace the classification loss function used in Task 1:
+The classification loss function used in Task 1:
 
 ```python
 nn.CrossEntropyLoss()
 ```
 
-with the regression loss:
+will be replaced with:
 
 ```python
 nn.MSELoss()
 ```
 
-The differences between the two loss functions and their effects on the model will be discussed in the accompanying report.
+The differences between Cross-Entropy Loss and Mean Squared Error Loss will be discussed in the accompanying report.
 
 ---
 
-## Project Report
+# Report
 
-The accompanying report is written in LaTeX using the **NeurIPS 2022 template**.
+The project report is written in **LaTeX using the NeurIPS 2022 template**.
 
-The report discusses:
+The report documents the implementation and results of each task, including:
 
-* Task 1 PyTorch tutorial results
+* PyTorch tutorial implementation
+* FashionMNIST training and evaluation
+* Ground-truth and prediction visualization
 * CIFAR-10 preprocessing
 * Modified neural network architecture
-* Cross-Entropy Loss and Mean Squared Error Loss
-* Training and evaluation results
-* Model prediction visualizations
+* Loss-function modifications
+* Experimental results and visualizations
 
 ---
 
-## Repository
-
-Project repository:
-
-`https://github.com/luisy-eng/ECE491E_Lab1`
-
----
-
-## Author
+# Author
 
 **Luis Hernandez**
 Department of Electrical and Computer Engineering
