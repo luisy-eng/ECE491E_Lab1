@@ -21,16 +21,13 @@ ECE491E_Lab1/
 ├── README.md
 │
 ├── Task1/
-│   ├── Task1_Tensors.ipynb
-│   ├── Task1_Datasets&DataLoaders.ipynb
-│   ├── Task1_transforms.ipynb
-│   ├── Task1_buildmodel_tutorial.ipynb
-│   ├── Task1_autogradqs_tutorial.ipynb
-│   ├── Task1_optimization.ipynb
-│   └── Task1_saveloadrun.ipynb
+│   └── PyTorch tutorial notebooks
 │
-└── Task2/
-    └── Task2_CIFAR10.ipynb
+├── Task2/
+│   └── Task2_CIFAR10.ipynb
+│
+└── Task3/
+    └── Task3_CustomModel.ipynb
 ```
 
 Tasks 3 and 4 will be added as the project progresses.
@@ -142,53 +139,182 @@ Therefore, **3,072 input features** will be used as the input size of the model 
 
 ---
 
-# Task 3 — Modified Neural Network
+````markdown
+# Task 3 — Modified Neural Network Architecture
 
-**Status: Not Started**
+**Status: Complete**
 
-Task 3 will replace the tutorial network with a deeper feedforward neural network using the CIFAR-10 input produced in Task 2.
+Task 3 replaces the neural network architecture used in the original PyTorch
+tutorial with a deeper feedforward neural network designed for the CIFAR-10
+input prepared in Task 2.
 
-Required architecture:
+The implementation is available in the [`Task3/`](Task3/) directory.
+
+## Input Features
+
+Each CIFAR-10 image has dimensions:
 
 ```text
-3072
-  ↓
-Linear(3072, 128)
-  ↓
-ReLU
-  ↓
-Dropout(0.3)
-  ↓
-Linear(128, 64)
-  ↓
-ReLU
-  ↓
-Dropout(0.3)
-  ↓
-Linear(64, 1)
-  ↓
-Regression Output
+[3, 32, 32]
+````
+
+representing three RGB channels and a 32 × 32 pixel image.
+
+Because the model is a fully connected feedforward neural network, each image
+is flattened before entering the first linear layer:
+
+```text
+3 × 32 × 32 = 3072 input features
 ```
 
----
+## Model Architecture
 
+The modified model is implemented as a subclass of PyTorch's `nn.Module`.
+
+The required architecture is:
+
+```text
+CIFAR-10 Image [3, 32, 32]
+          │
+          ▼
+       Flatten
+          │
+          ▼
+        3072
+          │
+          ▼
+ Linear(3072, 128)
+          │
+          ▼
+         ReLU
+          │
+          ▼
+   Dropout(p=0.3)
+          │
+          ▼
+  Linear(128, 64)
+          │
+          ▼
+         ReLU
+          │
+          ▼
+   Dropout(p=0.3)
+          │
+          ▼
+    Linear(64, 1)
+          │
+          ▼
+  Regression Output
+```
+
+The two hidden layers contain 128 and 64 neurons respectively. ReLU activation
+is applied after each hidden linear layer to introduce nonlinearity.
+
+A dropout probability of `0.3` is applied after each hidden layer to reduce
+overfitting during training.
+
+The final layer contains a single neuron as required for the regression output
+used in the project.
+
+## Model Verification
+
+The model was tested using a synthetic batch matching the dimensions of a
+CIFAR-10 batch:
+
+```text
+Input shape:  [64, 3, 32, 32]
+Output shape: [64, 1]
+```
+
+The successful forward pass confirms that the network accepts CIFAR-10 images
+and produces one output value for each input image.
+
+## Model Parameters
+
+The completed network contains:
+
+| Parameter            |       Value |
+| -------------------- | ----------: |
+| Input Features       |       3,072 |
+| Hidden Layer 1       | 128 neurons |
+| Hidden Layer 2       |  64 neurons |
+| Output Neurons       |           1 |
+| Dropout Rate         |         0.3 |
+| Total Parameters     |     401,665 |
+| Trainable Parameters |     401,665 |
+
+All model parameters are trainable.
+
+## Task 3 Result
+
+Task 3 successfully produced the required deeper feedforward neural network:
+
+```text
+3072 → 128 → 64 → 1
+```
+
+with ReLU activation and dropout regularization after each hidden layer.
+
+The model architecture is now prepared for the regression loss function and
+training procedure introduced in Task 4.
+
+````
+
+Then change the top repository structure from:
+
+```text
+ECE491E_Lab1/
+│
+├── README.md
+├── Task1/
+│   └── ...
+│
+└── Task2/
+    └── Task2_CIFAR10.ipynb
+````
+
+to:
+
+```text
+ECE491E_Lab1/
+│
+├── README.md
+│
+├── Task1/
+│   └── PyTorch tutorial notebooks
+│
+├── Task2/
+│   └── Task2_CIFAR10.ipynb
+│
+└── Task3/
+    └── Task3_CustomModel.ipynb
+```
+
+Use your **actual Task 3 notebook filename** there if it's different.
+
+Finally, change this line:
+
+```markdown
+Tasks 3 and 4 will be added as the project progresses.
+```
+
+to:
+
+```markdown
+Task 4 will be added as the project progresses.
+```
+
+And leave your existing Task 4 section as:
+
+```markdown
 # Task 4 — Modified Loss Function
 
 **Status: Not Started**
-
-Task 4 will replace the classification loss function used in Task 1:
-
-```python
-nn.CrossEntropyLoss()
 ```
 
-with the regression loss:
+That keeps the README appropriately concise: the **LaTeX report explains the theory in depth**, while the README tells someone looking at GitHub what you implemented, where to find it, and what results to expect.
 
-```python
-nn.MSELoss()
-```
 
-The differences between the two loss functions and the implications of using a regression loss with CIFAR-10 will be discussed in the project report.
 
 ---
 
